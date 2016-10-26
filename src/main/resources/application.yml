@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      profile:
+
+server:
+  port: 22222
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.0.33:11111/eureka/
