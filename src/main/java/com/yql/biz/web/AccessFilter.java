@@ -66,23 +66,30 @@ public class AccessFilter extends ZuulFilter {
             String userCode = codeResolver.resolve(jatObj);
             appendUserCode(ctx, userCode);
         } catch (Exception e) {
-            request.setAttribute("javax.servlet.error.status_code", 403);
-            request.setAttribute("javax.servlet.error.exception", e);
-            request.setAttribute("javax.servlet.error.message", e.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher(
-                    this.errorPath);
-            if (dispatcher != null) {
-                ctx.set("sendErrorFilter.ran", true);
-                if (!ctx.getResponse().isCommitted()) {
-                    try {
-                        dispatcher.forward(request, ctx.getResponse());
-                    } catch (ServletException | IOException e1) {
-                        //ignore
-                    }
+            setErrorInfo(request, e);
+            forward(ctx, request);
+        }
+        return null;
+    }
+
+    private void forward(RequestContext ctx, HttpServletRequest request) {
+        RequestDispatcher dispatcher = request.getRequestDispatcher(this.errorPath);
+        if (dispatcher != null) {
+            ctx.set("sendErrorFilter.ran", true);
+            if (!ctx.getResponse().isCommitted()) {
+                try {
+                    dispatcher.forward(request, ctx.getResponse());
+                } catch (ServletException | IOException e1) {
+                    //ignore
                 }
             }
         }
-        return null;
+    }
+
+    private void setErrorInfo(HttpServletRequest request, Exception e) {
+        request.setAttribute("javax.servlet.error.status_code", 403);
+        request.setAttribute("javax.servlet.error.exception", e);
+        request.setAttribute("javax.servlet.error.message", e.getMessage());
     }
 
     private void appendUserCode(RequestContext ctx, String userCode) {
