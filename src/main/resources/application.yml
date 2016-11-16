@@ -1,14 +1,26 @@
-spring:
-  application:
-    name: api-gateway
-  cloud:
-    config:
-      profile:
-
-server:
-  port: 22222
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://192.168.0.33:11111/eureka/
+#zuul:
+#  ignored-services: "*"
+#  ignored-patterns: /error
+#  routes:
+#    order-center:
+#      path: /order-center/**
+#      serviceId: order-center
+#    pay-server:
+#      path: /pay-server/**
+#      serviceId: pay-server
+#spring:
+#  messages:
+#    basename: errors,exception
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 30000
+#    order-center:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 30000
+#hystrix.plugin.HystrixDynamicProperties.implementation
