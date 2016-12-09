@@ -35,6 +35,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
         <dependency>
@@ -75,7 +79,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Camden.SR1</version>
+                <version>Camden.SR2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -83,6 +87,7 @@
     </dependencyManagement>
 
     <build>
+        <finalName>api-gateway-${version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

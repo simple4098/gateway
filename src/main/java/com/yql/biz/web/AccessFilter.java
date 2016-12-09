@@ -8,27 +8,25 @@ import com.yql.biz.exception.JatInvalidException;
 import com.yql.biz.model.Jat;
 import com.yql.biz.support.UserCodeResolver;
 import com.yql.biz.support.validation.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wangxiaohong
  */
-@Component("accessFilter")
 public class AccessFilter extends ZuulFilter {
+    private final static Logger log = LoggerFactory.getLogger(AccessFilter.class);
+
+    private PathMatcher pathMatcher = new AntPathMatcher();
 
     @Value("${error.path:/error}")
     private String errorPath;
@@ -38,6 +36,8 @@ public class AccessFilter extends ZuulFilter {
 
     @Resource
     private Validator<Jat> jatValidator;
+
+    private Set<String> ignoredPatterns = new LinkedHashSet<>();
 
 
     @Override
@@ -52,6 +52,15 @@ public class AccessFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        RequestContext currentContext = RequestContext.getCurrentContext();
+        String requestURI = currentContext.getRequest().getRequestURI();
+        for (String pattern : this.ignoredPatterns) {
+            log.debug("Matching ignored pattern:" + pattern);
+            if (this.pathMatcher.match(pattern, requestURI)) {
+                log.debug("Path " + requestURI + " matches ignored pattern " + pattern);
+                return false;
+            }
+        }
         return true;
     }
 
@@ -122,5 +131,13 @@ public class AccessFilter extends ZuulFilter {
             }
         }
         return params;
+    }
+
+    public Set<String> getIgnoredPatterns() {
+        return ignoredPatterns;
+    }
+
+    public void setIgnoredPatterns(Set<String> ignoredPatterns) {
+        this.ignoredPatterns = ignoredPatterns;
     }
 }

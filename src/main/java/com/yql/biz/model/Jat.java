@@ -16,7 +16,7 @@ public class Jat implements Serializable {
 
     @Override
     public String toString() {
-        return "appKey:'" + appKey + '\'' +
+        return "｛appKey:'" + appKey + '\'' +
                 ",token:'" + token + '\'' +
                 ",timestamp:" + timestamp +
                 '}';
