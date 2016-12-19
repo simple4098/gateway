@@ -1,6 +1,6 @@
 package com.yql.biz.exception;
 
-import com.yql.biz.exception.MessageRuntimeException;
+import com.yql.core.exception.MessageRuntimeException;
 
 /**
  * @author wangxiaohong
