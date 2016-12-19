@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author wangxiaohong
  */
-@Configuration
-public class WebConfig {
+@Configuration("filterConfiguration")
+public class FilterConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "access.filter", name = "enabled", havingValue = "true")
